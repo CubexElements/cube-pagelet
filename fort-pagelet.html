@@ -1,31 +1,35 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="./fort-pagelet-content.html">
 
 <!--
 An element to load a url into a container
 
 Example:
 
-    <fort-pagelet url="./ajax.html" refresh="3">Loading Placeholder</fort-pagelet>
+    <fort-pagelet url="./ajax.html"></fort-pagelet>
+
+Example:
+
+    <fort-pagelet url="./random.html" refresh="3"></fort-pagelet>
 
 @demo demo/index.html
 -->
 
 <dom-module id="fort-pagelet">
-  <template strip-whitespace>
-    <iron-ajax auto url="[[url]]" last-response="{{content}}"
-               on-response="handleResponse"
-               handle-as="document" id="request"></iron-ajax>
-    <div id="ajax">
+  <template>
+    <iron-ajax auto url="[[url]]" handle-as="document"
+               last-response="{{fort-pagelet-content}}"></iron-ajax>
+    <fort-pagelet-content html="{{fort-pagelet-content}}">
       <content></content>
-    </div>
+    </fort-pagelet-content>
   </template>
 
   <script>
     Polymer(
       {
-        is:             'fort-pagelet',
-        properties:     {
+        is:            'fort-pagelet',
+        properties:    {
           /**
            * URL you want to be loaded into the container
            */
@@ -33,33 +37,33 @@ Example:
           /**
            * Number of seconds to refresh the url
            */
-          refresh: Number
+          refresh: {type: Number, observer: 'startInterval'}
         },
-        handleResponse: function (data)
-                        {
-                          this.$.ajax.innerHTML = data.detail.response.body.innerHTML
-                        },
-        attached:       function ()
-                        {
-                          var self = this;
-                          if(self.refresh)
-                          {
-                            this.refreshInterval = setInterval(
-                              function ()
-                              {
-                                self.$.request.generateRequest();
-                              },
-                              self.refresh * 1000
-                            );
-                          }
-                        },
-        detached:       function ()
-                        {
-                          if(this.refreshInterval)
-                          {
-                            clearInterval(this.refreshInterval);
-                          }
-                        }
+        stopInterval:  function ()
+                       {
+                         if(this.refreshInterval)
+                         {
+                           clearInterval(this.refreshInterval);
+                         }
+                       },
+        startInterval: function ()
+                       {
+                         var self = this;
+                         self.stopInterval();
+                         if(self.refresh)
+                         {
+                           this.refreshInterval = setInterval(
+                             function ()
+                             {
+                               self.querySelector('iron-ajax')
+                                   .generateRequest();
+                             },
+                             self.refresh * 1000
+                           );
+                         }
+                       },
+        attached:      function () {this.startInterval()},
+        detached:      function () {this.stopInterval()}
       }
     );
   </script>

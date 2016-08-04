@@ -1,0 +1,33 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element to bind html content to a container
+
+Example:
+
+    <fort-pagelet-content html="this is some <strong>bold</strong> content"></fort-pagelet-content>
+
+@demo demo/fort-pagelet-content.html
+-->
+
+<polymer-element name="fort-pagelet-content">
+  <script>
+    Polymer(
+      {
+        is:          'fort-pagelet-content',
+        properties:  {
+          html: {
+            type:     String,
+            observer: 'htmlChanged'
+          }
+        },
+        htmlChanged: function ()
+                     {
+                       // WARNING: potential XSS vulnerability if `html` comes from an untrusted source
+                       this.innerHTML = this.html instanceof Object
+                         ? this.html.body.innerHTML : this.html;
+                     }
+      }
+    );
+  </script>
+</polymer-element>
