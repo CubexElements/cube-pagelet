@@ -10,24 +10,24 @@ Example:
 @demo demo/fort-pagelet-content.html
 -->
 
-<polymer-element name="fort-pagelet-content">
+<dom-module id="fort-pagelet-content">
   <script>
     Polymer(
       {
-        is:          'fort-pagelet-content',
-        properties:  {
+        is:           'fort-pagelet-content',
+        properties:   {
           html: {
             type:     String,
-            observer: 'htmlChanged'
+            observer: '_htmlChanged'
           }
         },
-        htmlChanged: function ()
-                     {
-                       // WARNING: potential XSS vulnerability if `html` comes from an untrusted source
-                       this.innerHTML = this.html instanceof Object
-                         ? this.html.body.innerHTML : this.html;
-                     }
+        _htmlChanged: function ()
+                      {
+                        // WARNING: potential XSS vulnerability if `html` comes from an untrusted source
+                        this.innerHTML = this.html instanceof Object
+                          ? this.html.body.innerHTML : this.html;
+                      }
       }
     );
   </script>
-</polymer-element>
+</dom-module>
