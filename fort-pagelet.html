@@ -18,7 +18,7 @@ Example:
 
 <dom-module id="fort-pagelet">
   <template>
-    <iron-ajax auto url="[[url]]" handle-as="document"
+    <iron-ajax id="ajax" auto url="[[url]]" handle-as="document"
                last-response="{{fort-pagelet-content}}"></iron-ajax>
     <fort-pagelet-content html="{{fort-pagelet-content}}">
       <content></content>
@@ -55,8 +55,7 @@ Example:
                            this.refreshInterval = setInterval(
                              function ()
                              {
-                               self.querySelector('iron-ajax')
-                                   .generateRequest();
+                               self.$.ajax.generateRequest();
                              },
                              self.refresh * 1000
                            );
