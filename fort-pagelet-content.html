@@ -10,22 +10,42 @@ Example:
 @demo demo/fort-pagelet-content.html
 -->
 
-<dom-module id="fort-pagelet-content">
+<dom-module id="fort-pagelet-content" attributes="html">
+  <template>
+    <slot></slot>
+  </template>
   <script>
     Polymer(
       {
         is:           'fort-pagelet-content',
         properties:   {
-          html: {
-            type:     String,
-            observer: '_htmlChanged'
-          }
+          html: {type: String, observer: '_htmlChanged'}
         },
         _htmlChanged: function ()
                       {
-                        // WARNING: potential XSS vulnerability if `html` comes from an untrusted source
-                        this.innerHTML = this.html instanceof Object
-                          ? this.html.body.innerHTML : this.html;
+                        if(this.html)
+                        {
+                          var frag = document.createRange().createContextualFragment(this.html || ''),
+                            imports = frag.querySelectorAll('link[rel="import"]');
+
+                          for(var idx in imports)
+                          {
+                            if(imports.hasOwnProperty(idx))
+                            {
+                              this.importHref(imports[idx].getAttribute('href'));
+                              frag.removeChild(imports[idx]);
+                            }
+                          }
+
+                          while(this.firstChild)
+                          {
+                            this.removeChild(this.firstChild);
+                          }
+                          if(frag)
+                          {
+                            this.appendChild(frag);
+                          }
+                        }
                       }
       }
     );

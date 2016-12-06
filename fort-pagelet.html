@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../fort-resource/fort-resource.html">
 <link rel="import" href="./fort-pagelet-content.html">
 
 <!--
@@ -16,12 +17,12 @@ Example:
 @demo demo/index.html
 -->
 
-<dom-module id="fort-pagelet">
+<dom-module id="fort-pagelet" attributes="auto auth url">
   <template>
-    <iron-ajax id="ajax" auto url="[[url]]" handle-as="document"
-               last-response="{{fort-pagelet-content}}"></iron-ajax>
+    <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]"
+                   data="{{fort-pagelet-content}}"></fort-resource>
     <fort-pagelet-content html="{{fort-pagelet-content}}">
-      <content></content>
+      <slot></slot>
     </fort-pagelet-content>
   </template>
 
@@ -33,18 +34,25 @@ Example:
           /**
            * URL you want to be loaded into the container
            */
-          url:     String,
+          url:              {type: String, notify: true},
+          auth:             {type: Boolean, notify: true},
+          auto:             {type: Boolean, notify: true},
           /**
            * Number of seconds to refresh the url
            */
-          refresh: {type: Number, observer: 'startInterval'}
+          refresh:          {type: Number, observer: 'startInterval'},
+          _refreshInterval: {type: Number}
         },
         stopInterval:  function ()
                        {
-                         if(this.refreshInterval)
+                         if(this._refreshInterval)
                          {
-                           clearInterval(this.refreshInterval);
+                           clearInterval(this._refreshInterval);
                          }
+                       },
+        update:        function ()
+                       {
+                         this.$.res.update(true);
                        },
         startInterval: function ()
                        {
@@ -52,10 +60,10 @@ Example:
                          self.stopInterval();
                          if(self.refresh)
                          {
-                           this.refreshInterval = setInterval(
+                           this._refreshInterval = setInterval(
                              function ()
                              {
-                               self.$.ajax.generateRequest();
+                               self.$.res.update(true);
                              },
                              self.refresh * 1000
                            );
