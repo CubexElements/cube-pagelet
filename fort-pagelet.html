@@ -21,7 +21,7 @@ Example:
   <template>
     <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]"
                    data="{{fort-pagelet-content}}"></fort-resource>
-    <fort-pagelet-content html="{{fort-pagelet-content}}">
+    <fort-pagelet-content html="[[fort-pagelet-content]]">
       <slot></slot>
     </fort-pagelet-content>
   </template>
@@ -29,8 +29,8 @@ Example:
   <script>
     Polymer(
       {
-        is:            'fort-pagelet',
-        properties:    {
+        is:         'fort-pagelet',
+        properties: {
           /**
            * URL you want to be loaded into the container
            */
@@ -40,9 +40,36 @@ Example:
           /**
            * Number of seconds to refresh the url
            */
-          refresh:          {type: Number, observer: 'startInterval'},
+          refresh:          {type: Number, value: 0},
           _refreshInterval: {type: Number}
         },
+
+        observers: ['_refresh(auto,url,refresh)'],
+
+        _refresh: function ()
+                  {
+                    if(this.auto)
+                    {
+                      this.update();
+                    }
+                  },
+
+        update:        function ()
+                       {
+                         this.$.res.update(true);
+                         this.startInterval()
+                       },
+        startInterval: function ()
+                       {
+                         if(this.refresh > 0 && !this._refreshInterval)
+                         {
+                           this.stopInterval();
+                           this._refreshInterval = setInterval(
+                             function () { this.$.res.update(true); }.bind(this),
+                             this.refresh * 1000
+                           );
+                         }
+                       },
         stopInterval:  function ()
                        {
                          if(this._refreshInterval)
@@ -50,26 +77,6 @@ Example:
                            clearInterval(this._refreshInterval);
                          }
                        },
-        update:        function ()
-                       {
-                         this.$.res.update(true);
-                       },
-        startInterval: function ()
-                       {
-                         var self = this;
-                         self.stopInterval();
-                         if(self.refresh)
-                         {
-                           this._refreshInterval = setInterval(
-                             function ()
-                             {
-                               self.$.res.update(true);
-                             },
-                             self.refresh * 1000
-                           );
-                         }
-                       },
-        attached:      function () {this.startInterval()},
         detached:      function () {this.stopInterval()}
       }
     );

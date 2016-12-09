@@ -11,9 +11,12 @@
 <body unresolved>
 
 Here is a pagelet:
-<fort-pagelet auto url="./ajax.html">Loading ajax content...</fort-pagelet>
-<fort-pagelet auto url="./ajax.html" refresh="3">Loading ajax content with 3 second refresh ...</fort-pagelet>
-<fort-pagelet auto url="./random.html" refresh="5">Loading random content on 5 second refresh ...</fort-pagelet>
+<fort-pagelet url="./ajax.html">Loading ajax.html content</fort-pagelet>
+<fort-pagelet auto url="./ajax.html" refresh="3">[auto] Load ajax.html with 3 second refresh ...</fort-pagelet>
+
+<fort-pagelet url="./random.html" refresh="5">
+  <button onclick="this.parentNode.update()">Load random.html every 5 seconds</button>
+</fort-pagelet>
 
 </body>
 </html>
