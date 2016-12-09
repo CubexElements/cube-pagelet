@@ -17,11 +17,11 @@ Example:
 @demo demo/index.html
 -->
 
-<dom-module id="fort-pagelet" attributes="auto auth url">
+<dom-module id="fort-pagelet" attributes="auto auth url refresh">
   <template>
     <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]"
-                   data="{{fort-pagelet-content}}"></fort-resource>
-    <fort-pagelet-content html="[[fort-pagelet-content]]">
+                   data="{{_fortPageletContent}}"></fort-resource>
+    <fort-pagelet-content id="content" html="[[_fortPageletContent]]">
       <slot></slot>
     </fort-pagelet-content>
   </template>
@@ -34,25 +34,24 @@ Example:
           /**
            * URL you want to be loaded into the container
            */
-          url:              {type: String, notify: true},
-          auth:             {type: Boolean, notify: true},
-          auto:             {type: Boolean, notify: true},
+          url:                    {type: String, notify: true},
+          auth:                   {type: Boolean, notify: true},
+          auto:                   {type: Boolean, notify: true},
           /**
            * Number of seconds to refresh the url
            */
-          refresh:          {type: Number, value: 0},
-          _refreshInterval: {type: Number}
+          refresh:                {type: Number, value: 0},
+          _refreshIntervalHandle: {type: Number}
         },
 
         observers: ['_refresh(auto,url,refresh)'],
-
-        _refresh: function ()
-                  {
-                    if(this.auto)
-                    {
-                      this.update();
-                    }
-                  },
+        _refresh:  function ()
+                   {
+                     if(this.auto)
+                     {
+                       this.update();
+                     }
+                   },
 
         update:        function ()
                        {
@@ -72,9 +71,10 @@ Example:
                        },
         stopInterval:  function ()
                        {
-                         if(this._refreshInterval)
+                         if(this._refreshIntervalHandle)
                          {
-                           clearInterval(this._refreshInterval);
+                           //noinspection JSCheckFunctionSignatures
+                           clearInterval(this._refreshIntervalHandle);
                          }
                        },
         detached:      function () {this.stopInterval()}

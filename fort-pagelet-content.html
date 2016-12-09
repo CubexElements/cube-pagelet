@@ -19,13 +19,15 @@ Example:
       {
         is:           'fort-pagelet-content',
         properties:   {
-          html: {type: String, observer: '_htmlChanged'}
+          html:        {type: String, observer: '_htmlChanged'},
+          _hasChanged: {type: Boolean, value: true}
         },
         _htmlChanged: function ()
                       {
-                        if(this.html || this.html == '')
+                        if(this.html !== null || this._hasChanged)
                         {
-                          var frag = document.createRange().createContextualFragment(this.html),
+                          this._hasChanged = true;
+                          var frag = document.createRange().createContextualFragment(this.html || ''),
                             imports = frag.querySelectorAll('link[rel="import"]');
 
                           for(var idx in imports)
