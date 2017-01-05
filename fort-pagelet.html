@@ -17,7 +17,7 @@ Example:
 @demo demo/index.html
 -->
 
-<dom-module id="fort-pagelet" attributes="auto auth url refresh">
+<dom-module id="fort-pagelet" attributes="auto auth url refresh ttl">
   <template>
     <style>
       :host {
@@ -25,7 +25,7 @@ Example:
       }
     </style>
 
-    <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]"
+    <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]" ttl="[[ttl]]"
                    data="{{_fortPageletContent}}"></fort-resource>
     <fort-pagelet-content id="content" html="[[_fortPageletContent]]">
       <slot></slot>
@@ -40,9 +40,13 @@ Example:
           /**
            * URL you want to be loaded into the container
            */
-          url:                    {type: String, notify: true},
-          auth:                   {type: Boolean, notify: true},
-          auto:                   {type: Boolean, notify: true},
+          url:                    {type: String},
+          auth:                   {type: Boolean},
+          auto:                   {type: Boolean},
+          /**
+           * ttl: time to live (in seconds)
+           */
+          ttl:                    {type: Number, value: 0},
           /**
            * Number of seconds to refresh the url
            */
@@ -55,13 +59,13 @@ Example:
                    {
                      if(this.auto)
                      {
-                       this.update();
+                       this.update(false);
                      }
                    },
 
-        update:        function ()
+        update:        function (ignoreCache)
                        {
-                         this.$.res.update(true);
+                         this.$.res.update(ignoreCache);
                          this.startInterval()
                        },
         startInterval: function ()
