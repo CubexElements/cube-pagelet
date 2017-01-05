@@ -19,6 +19,12 @@ Example:
 
 <dom-module id="fort-pagelet" attributes="auto auth url refresh">
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
     <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]"
                    data="{{_fortPageletContent}}"></fort-resource>
     <fort-pagelet-content id="content" html="[[_fortPageletContent]]">
