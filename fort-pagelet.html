@@ -17,7 +17,7 @@ Example:
 @demo demo/index.html
 -->
 
-<dom-module id="fort-pagelet" attributes="auto auth url refresh ttl">
+<dom-module id="fort-pagelet" attributes="auto auth url refresh ttl headers">
   <template>
     <style>
       :host {
@@ -25,7 +25,7 @@ Example:
       }
     </style>
 
-    <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]" ttl="[[ttl]]"
+    <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]" ttl="[[ttl]]" headers="[[headers]]"
                    data="{{_fortPageletContent}}"></fort-resource>
     <fort-pagelet-content id="content" html="[[_fortPageletContent]]">
       <slot></slot>
@@ -51,6 +51,7 @@ Example:
            * Number of seconds to refresh the url
            */
           refresh:                {type: Number, value: 0},
+          headers:                {type: Object},
           _refreshIntervalHandle: {type: Number}
         },
 
