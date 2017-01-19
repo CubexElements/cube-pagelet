@@ -5,12 +5,12 @@ An element to bind html content to a container
 
 Example:
 
-    <fort-pagelet-content html="this is some <strong>bold</strong> content"></fort-pagelet-content>
+    <cube-pagelet-content html="this is some <strong>bold</strong> content"></cube-pagelet-content>
 
-@demo demo/fort-pagelet-content.html
+@demo demo/cube-pagelet-content.html
 -->
 
-<dom-module id="fort-pagelet-content" attributes="html">
+<dom-module id="cube-pagelet-content" attributes="html">
   <template>
     <style>
       :host {
@@ -23,7 +23,7 @@ Example:
   <script>
     Polymer(
       {
-        is:           'fort-pagelet-content',
+        is:           'cube-pagelet-content',
         properties:   {
           html:        {type: String, observer: '_htmlChanged'},
           _hasChanged: {type: Boolean, value: true}

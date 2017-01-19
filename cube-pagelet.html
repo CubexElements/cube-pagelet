@@ -1,23 +1,23 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
-<link rel="import" href="../fort-resource/fort-resource.html">
-<link rel="import" href="./fort-pagelet-content.html">
+<link rel="import" href="../cube-resource/cube-resource.html">
+<link rel="import" href="./cube-pagelet-content.html">
 
 <!--
 An element to load a url into a container
 
 Example:
 
-    <fort-pagelet url="./ajax.html"></fort-pagelet>
+    <cube-pagelet url="./ajax.html"></cube-pagelet>
 
 Example:
 
-    <fort-pagelet url="./random.html" refresh="3"></fort-pagelet>
+    <cube-pagelet url="./random.html" refresh="3"></cube-pagelet>
 
 @demo demo/index.html
 -->
 
-<dom-module id="fort-pagelet" attributes="auto auth url refresh ttl headers">
+<dom-module id="cube-pagelet" attributes="auto auth url refresh ttl headers">
   <template>
     <style>
       :host {
@@ -25,17 +25,17 @@ Example:
       }
     </style>
 
-    <fort-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]" ttl="[[ttl]]" headers="[[headers]]"
-                   data="{{_fortPageletContent}}"></fort-resource>
-    <fort-pagelet-content id="content" html="[[_fortPageletContent]]">
+    <cube-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]" ttl="[[ttl]]" headers="[[headers]]"
+                   data="{{_cubePageletContent}}"></cube-resource>
+    <cube-pagelet-content id="content" html="[[_cubePageletContent]]">
       <slot></slot>
-    </fort-pagelet-content>
+    </cube-pagelet-content>
   </template>
 
   <script>
     Polymer(
       {
-        is:         'fort-pagelet',
+        is:         'cube-pagelet',
         properties: {
           /**
            * URL you want to be loaded into the container

@@ -1,11 +1,11 @@
 {
-  "name": "fort-pagelet",
+  "name": "cube-pagelet",
   "version": "0.1.0",
-  "main": "fort-pagelet.html",
+  "main": "cube-pagelet.html",
   "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#2.0-preview",
-    "fort-resource": "FortifiElements/fort-resource"
+    "cube-resource": "CubexElements/cube-resource"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
