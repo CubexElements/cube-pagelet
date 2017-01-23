@@ -34,15 +34,29 @@ Example:
                         {
                           this._hasChanged = true;
                           var frag = document.createRange().createContextualFragment(this.html || ''),
-                            imports = frag.querySelectorAll('link[rel="import"]');
+                            imports = frag.querySelectorAll('link[rel="import"]'),
+                            loadedImports = 0;
 
                           for(var idx in imports)
                           {
                             if(imports.hasOwnProperty(idx))
                             {
-                              this.importHref(imports[idx].getAttribute('href'));
+                              this.importHref(
+                                imports[idx].getAttribute('href'), function ()
+                                {
+                                  loadedImports++;
+                                  if(loadedImports >= imports.length)
+                                  {
+                                    document.dispatchEvent(new CustomEvent('cube-pagelet-content-ready'));
+                                  }
+                                }
+                              );
                               frag.removeChild(imports[idx]);
                             }
+                          }
+                          if(imports.length <= 0)
+                          {
+                            document.dispatchEvent(new CustomEvent('cube-pagelet-content-ready'));
                           }
 
                           while(this.firstChild)
