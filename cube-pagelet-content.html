@@ -45,18 +45,10 @@ Example:
                                 imports[idx].getAttribute('href'), function ()
                                 {
                                   loadedImports++;
-                                  if(loadedImports >= imports.length)
-                                  {
-                                    document.dispatchEvent(new CustomEvent('cube-pagelet-content-ready'));
-                                  }
                                 }
                               );
                               frag.removeChild(imports[idx]);
                             }
-                          }
-                          if(imports.length <= 0)
-                          {
-                            document.dispatchEvent(new CustomEvent('cube-pagelet-content-ready'));
                           }
 
                           while(this.firstChild)
@@ -67,6 +59,7 @@ Example:
                           {
                             this.appendChild(frag);
                           }
+                          document.dispatchEvent(new CustomEvent('cube-pagelet-content-ready'));
                         }
                       }
       }
