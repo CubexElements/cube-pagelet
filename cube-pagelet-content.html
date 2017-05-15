@@ -59,7 +59,7 @@ Example:
                           {
                             this.appendChild(frag);
                           }
-                          document.dispatchEvent(new CustomEvent('cube-pagelet-content-ready'));
+                          this.fire('cube-pagelet-content-ready');
                         }
                       }
       }
