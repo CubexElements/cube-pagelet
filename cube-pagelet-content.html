@@ -45,6 +45,10 @@ Example:
                                 imports[idx].getAttribute('href'), function ()
                                 {
                                   loadedImports++;
+                                  if(loadedImports >= imports.length)
+                                  {
+                                    this.fire('cube-pagelet-content-ready');
+                                  }
                                 }
                               );
                               frag.removeChild(imports[idx]);
