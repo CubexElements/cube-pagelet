@@ -33,7 +33,14 @@ Example:
                         if(this.html !== null || this._hasChanged)
                         {
                           this._hasChanged = true;
-                          var frag = document.createRange().createContextualFragment(this.html || ''),
+                          var
+                            db = document.createElement('dom-bind'),
+                            tpl = document.createElement('template');
+                          db.appendChild(tpl);
+
+                          var
+                            doc = tpl.content.ownerDocument,
+                            frag = doc.createRange().createContextualFragment(this.html || ''),
                             imports = frag.querySelectorAll('link[rel="import"]'),
                             loadedImports = 0;
 
@@ -61,8 +68,10 @@ Example:
                           }
                           if(frag)
                           {
-                            this.appendChild(frag);
+                            tpl.content.appendChild(frag);
+                            this.appendChild(db);
                           }
+
                           this.fire('cube-pagelet-content-ready');
                         }
                       }
