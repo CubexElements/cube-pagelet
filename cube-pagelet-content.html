@@ -33,48 +33,62 @@ Example:
                         if(this.html !== null || this._hasChanged)
                         {
                           this._hasChanged = true;
-                          var
-                            db = document.createElement('dom-bind'),
-                            tpl = document.createElement('template');
-                          db.appendChild(tpl);
 
                           var
+                            idx,
+                            tpl = document.createElement('template'),
                             doc = tpl.content.ownerDocument,
-                            frag = doc.createRange().createContextualFragment(this.html || ''),
-                            imports = frag.querySelectorAll('link[rel="import"]'),
-                            loadedImports = 0;
+                            frag = doc.createRange().createContextualFragment(this.html || '');
 
-                          for(var idx in imports)
+                          // REMOVE IMPORTS ------------------------------------------------------------
+                          var
+                            imports = frag.querySelectorAll('link[rel="import"]'),
+                            importsLength = imports.length,
+                            loadedImports = 0;
+                          for(idx in imports)
                           {
                             if(imports.hasOwnProperty(idx))
                             {
-                              this.importHref(
-                                imports[idx].getAttribute('href'), function ()
-                                {
-                                  loadedImports++;
-                                  if(loadedImports >= imports.length)
-                                  {
-                                    this.fire('cube-pagelet-content-ready');
-                                  }
-                                }
-                              );
                               frag.removeChild(imports[idx]);
                             }
                           }
-
                           while(this.firstChild)
                           {
                             this.removeChild(this.firstChild);
                           }
-                          if(frag)
-                          {
-                            tpl.content.appendChild(frag);
-                            this.appendChild(db);
-                          }
 
-                          this.fire('cube-pagelet-content-ready');
+                          // APPEND CONTENT ------------------------------------------------------------
+                          tpl.content.appendChild(frag);
+                          this.appendChild(this._stampTemplate(tpl));
+
+                          // IMPORTS -------------------------------------------------------------------
+                          if(importsLength > 0)
+                          {
+                            for(idx in imports)
+                            {
+                              if(imports.hasOwnProperty(idx))
+                              {
+                                this.importHref(
+                                  imports[idx].getAttribute('href'), function ()
+                                  {
+                                    loadedImports++;
+                                    if(loadedImports >= importsLength)
+                                    {
+                                      this.fire(this._eventName);
+                                    }
+                                  }
+                                );
+                              }
+                            }
+                          }
+                          else
+                          {
+                            this.fire(this._eventName);
+                          }
                         }
-                      }
+                      },
+
+        _eventName: 'cube-pagelet-content-ready'
       }
     );
   </script>
