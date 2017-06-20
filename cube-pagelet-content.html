@@ -10,7 +10,7 @@ Example:
 @demo demo/cube-pagelet-content.html
 -->
 
-<dom-module id="cube-pagelet-content" attributes="html">
+<dom-module id="cube-pagelet-content" attributes="html local">
   <template>
     <style>
       :host {
@@ -26,6 +26,7 @@ Example:
         is:           'cube-pagelet-content',
         properties:   {
           html:        {type: String, observer: '_htmlChanged'},
+          local:       {type: Boolean},
           _hasChanged: {type: Boolean, value: true}
         },
         _htmlChanged: function ()
@@ -59,7 +60,19 @@ Example:
 
                           // APPEND CONTENT ------------------------------------------------------------
                           tpl.content.appendChild(frag);
-                          this.appendChild(this._stampTemplate(tpl));
+                          if(this.local)
+                          {
+                            var target = this.parentNode;
+                            if(target.host.tagName === 'CUBE-PAGELET')
+                            {
+                              target = target.host.parentNode;
+                            }
+                            target.appendChild(this._stampTemplate(tpl));
+                          }
+                          else
+                          {
+                            this.appendChild(this._stampTemplate(tpl));
+                          }
 
                           // IMPORTS -------------------------------------------------------------------
                           if(importsLength > 0)

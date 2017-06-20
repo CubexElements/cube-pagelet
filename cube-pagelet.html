@@ -17,7 +17,7 @@ Example:
 @demo demo/index.html
 -->
 
-<dom-module id="cube-pagelet" attributes="auto auth url refresh ttl headers status">
+<dom-module id="cube-pagelet" attributes="auto auth url refresh ttl headers status local">
   <template>
     <style>
       :host {
@@ -27,7 +27,7 @@ Example:
 
     <cube-resource id="res" auto="[[auto]]" auth="[[auth]]" url="[[url]]" ttl="[[ttl]]" headers="[[headers]]"
                    data="{{_cubePageletContent}}" status="{{status}}"></cube-resource>
-    <cube-pagelet-content id="content" html="[[_cubePageletContent]]">
+    <cube-pagelet-content id="content" html="[[_cubePageletContent]]" local="[[local]]">
       <slot></slot>
     </cube-pagelet-content>
   </template>
@@ -42,6 +42,7 @@ Example:
            */
           url:                    {type: String},
           auth:                   {type: Boolean},
+          local:                  {type: Boolean},
           auto:                   {type: Boolean},
           /**
            * ttl: time to live (in seconds)
