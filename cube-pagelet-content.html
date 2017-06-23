@@ -25,16 +25,14 @@ Example:
       {
         is:           'cube-pagelet-content',
         properties:   {
-          html:        {type: String, observer: '_htmlChanged'},
-          local:       {type: Boolean},
-          _hasChanged: {type: Boolean, value: true}
+          html:          {type: String, observer: '_htmlChanged'},
+          local:         {type: Boolean, value: false},
+          _trackedNodes: {type: Array, value: function () {return [];}}
         },
         _htmlChanged: function ()
                       {
-                        if(this.html !== null || this._hasChanged)
+                        if(this.html !== null)
                         {
-                          this._hasChanged = true;
-
                           var
                             idx,
                             tpl = document.createElement('template'),
@@ -53,25 +51,40 @@ Example:
                               frag.removeChild(imports[idx]);
                             }
                           }
-                          while(this.firstChild)
+                          // remove previously added content
+                          for(idx in this._trackedNodes)
                           {
-                            this.removeChild(this.firstChild);
+                            if(this._trackedNodes.hasOwnProperty(idx))
+                            {
+                              this._trackedNodes[idx][0].removeChild(this._trackedNodes[idx][1]);
+                            }
                           }
+                          this._trackedNodes = [];
 
                           // APPEND CONTENT ------------------------------------------------------------
                           tpl.content.appendChild(frag);
-                          if(this.local)
+                          var target = this;
+                          while(
+                            (target.tagName === 'CUBE-PAGELET' || target.tagName === 'CUBE-PAGELET-CONTENT')
+                            && target.local)
                           {
-                            var target = this.parentNode;
-                            if(target.host.tagName === 'CUBE-PAGELET')
+                            if(target.parentNode)
                             {
-                              target = target.host.parentNode;
+                              target = target.parentNode;
                             }
-                            target.appendChild(this._stampTemplate(tpl));
+                            if(target.host)
+                            {
+                              target = target.host;
+                            }
                           }
-                          else
+
+                          var stamped = this._stampTemplate(tpl).childNodes;
+                          for(idx in stamped)
                           {
-                            this.appendChild(this._stampTemplate(tpl));
+                            if(stamped.hasOwnProperty(idx))
+                            {
+                              this._trackedNodes.push([target, target.appendChild(stamped[idx])]);
+                            }
                           }
 
                           // IMPORTS -------------------------------------------------------------------
