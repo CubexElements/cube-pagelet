@@ -78,13 +78,10 @@ Example:
                             }
                           }
 
-                          var stamped = this._stampTemplate(tpl).childNodes;
-                          for(idx in stamped)
+                          var stampedNodes = this._stampTemplate(tpl).childNodes;
+                          while(stampedNodes.length > 0)
                           {
-                            if(stamped.hasOwnProperty(idx))
-                            {
-                              this._trackedNodes.push([target, target.appendChild(stamped[idx])]);
-                            }
+                            this._trackedNodes.push([target, target.appendChild(stampedNodes[0])]);
                           }
 
                           // IMPORTS -------------------------------------------------------------------
