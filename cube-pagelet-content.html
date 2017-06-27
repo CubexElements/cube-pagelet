@@ -39,7 +39,7 @@ Example:
                             doc = tpl.content.ownerDocument,
                             frag = doc.createRange().createContextualFragment(this.html || '');
 
-                          // REMOVE IMPORTS ------------------------------------------------------------
+                          // REMOVE IMPORTS
                           var
                             imports = frag.querySelectorAll('link[rel="import"]'),
                             importsLength = imports.length,
@@ -51,7 +51,8 @@ Example:
                               frag.removeChild(imports[idx]);
                             }
                           }
-                          // remove previously added content
+
+                          // REMOVE OLD CONTENT
                           for(idx in this._trackedNodes)
                           {
                             if(this._trackedNodes.hasOwnProperty(idx))
@@ -61,7 +62,16 @@ Example:
                           }
                           this._trackedNodes = [];
 
-                          // APPEND CONTENT ------------------------------------------------------------
+                          // REMOVE REMAINING (UNTRACKED/SLOTTED) CONTENT
+                          for(idx in this.children)
+                          {
+                            if(this.children.hasOwnProperty(idx))
+                            {
+                              this.removeChild(this.children[idx]);
+                            }
+                          }
+
+                          // DETERMINE TARGET NODE
                           tpl.content.appendChild(frag);
                           var target = this;
                           while(
@@ -78,13 +88,14 @@ Example:
                             }
                           }
 
+                          // APPEND NEW CONTENT
                           var stampedNodes = this._stampTemplate(tpl).childNodes;
                           while(stampedNodes.length > 0)
                           {
                             this._trackedNodes.push([target, target.appendChild(stampedNodes[0])]);
                           }
 
-                          // IMPORTS -------------------------------------------------------------------
+                          // IMPORTS
                           if(importsLength > 0)
                           {
                             for(idx in imports)
