@@ -5,8 +5,7 @@
   <meta name="viewport"
         content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>Cubex Pagelet Demo</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../cube-pagelet.html">
+  <script type="module" src="../cube-pagelet.js"></script>
 </head>
 <body unresolved>
 
@@ -22,7 +21,7 @@
 <li>
   [url="./random.html"] [refresh="5"]
   <cube-pagelet url="./random.html" refresh="5">
-    <button onclick="this.parentNode.update()">Load random.html every 5 seconds</button>
+    <button onclick="this.parentNode.update()">Click to load random.html every 5 seconds</button>
   </cube-pagelet>
 </li>
 
